@@ -46,7 +46,7 @@ ModRM::ModRM(unsigned char mod, unsigned char reg, unsigned char rm) :
 
 void ModRM::encode(InstBuffer& buf) {
   unsigned char value = (_mod << 6) | (_reg << 3) | (_rm << 0);
-  buf.add(value);
+  buf << value;
 }
 
 X86CodeGen::X86CodeGen() :
@@ -60,16 +60,13 @@ unsigned char* X86CodeGen::getData() {
 }
 
 void X86CodeGen::mov(Reg32 regD, Reg32 regS) {
-  _buffer.add(0x89);
-  ModRM(0b11, regS.regCode(), regD.regCode()).encode(_buffer);
+  _buffer << 0x89 << ModRM(0b11, regS.regCode(), regD.regCode());
 }
 
 void X86CodeGen::mov(Reg32 reg, Imm32 imm) {
-  _buffer.add(0xC7);
-  ModRM(0b11, 0b000, reg.regCode()).encode(_buffer);
-  imm.encode(_buffer);
+  _buffer << 0xC7 << ModRM(0b11, 0b000, reg.regCode()) << imm;
 }
 
 void X86CodeGen::ret() {
-  _buffer.add(0xC3);
+  _buffer << 0xC3;
 }
