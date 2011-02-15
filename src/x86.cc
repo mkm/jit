@@ -59,6 +59,14 @@ unsigned char* X86CodeGen::getData() {
   return _buffer.getData();
 }
 
+void X86CodeGen::add(Reg32 regD, Reg32 regS) {
+  _buffer << 0x01 << ModRM(0b11, regS.regCode(), regD.regCode());
+}
+
+void X86CodeGen::add(Reg32 reg, Imm32 imm) {
+  _buffer << 0x81 << ModRM(0b11, 0b000, reg.regCode()) << imm;
+}
+
 void X86CodeGen::mov(Reg32 regD, Reg32 regS) {
   _buffer << 0x89 << ModRM(0b11, regS.regCode(), regD.regCode());
 }

@@ -44,6 +44,8 @@ public:
 
   unsigned char* getData();
 
+  void add(Reg32, Reg32);
+  void add(Reg32, Imm32);
   void mov(Reg32, Reg32);
   void mov(Reg32, Imm32);
   void ret();

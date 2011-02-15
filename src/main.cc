@@ -4,8 +4,10 @@
 
 int main() {
   X86CodeGen gen;
-  gen.mov(Reg32::ecx, Imm32(1337));
-  gen.mov(Reg32::eax, Reg32::ecx);
+  gen.mov(Reg32::eax, Imm32(2));
+  gen.mov(Reg32::ebx, Imm32(3));
+  gen.add(Reg32::ebx, Imm32(2));
+  gen.add(Reg32::eax, Reg32::ebx);
   gen.ret();
   unsigned char* data = gen.getData();
   int (*func)() = (int (*)())data;
