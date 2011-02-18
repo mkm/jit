@@ -5,14 +5,27 @@
 
 class Reg32 {
 public:
-  Reg32(unsigned int);
+  Reg32(unsigned char);
 
-  unsigned int regCode();
+  unsigned char regCode();
 
   static const Reg32 eax, ebx, ecx, edx, edi, esi, esp, ebp;
 
 private:
-  unsigned int _regCode;
+  unsigned char _regCode;
+};
+
+class Scale {
+public:
+  Scale(unsigned int);
+
+  unsigned int value();
+  bool isNone();
+
+  static const Scale none, one, two, four, eight;
+
+private:
+  unsigned int _value;
 };
 
 class Imm32 {
@@ -30,6 +43,7 @@ class Mem32 {
 public:
   Mem32(unsigned int);
 
+  unsigned int value();
   void encode(InstBuffer&);
 
 private:
@@ -46,6 +60,33 @@ private:
   unsigned char _value;
 };
 
+class SIB {
+public:
+  SIB(Scale, Reg32, Reg32);
+
+  void encode(InstBuffer&);
+
+private:
+  unsigned char _value;
+};
+
+class Ptr32 {
+public:
+  Ptr32(Mem32, Reg32, Reg32, Scale);
+
+  Mem32 displacement();
+  Reg32 base();
+  Reg32 index();
+  Scale scale();
+  SIB sib();
+  
+private:
+  Mem32 _displacement;
+  Reg32 _base;
+  Reg32 _index;
+  Scale _scale;  
+};
+
 class X86CodeGen {
 public:
   X86CodeGen();
@@ -57,6 +98,9 @@ public:
   void mov(Reg32, Reg32);
   void mov(Reg32, Imm32);
   void mov(Reg32, Mem32);
+  void mov(Reg32, Ptr32);
+  void push(Reg32);
+  void pop(Reg32);
   void ret();
 
 private:

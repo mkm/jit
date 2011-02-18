@@ -5,13 +5,15 @@
 int main() {
   int x = 14;
   X86CodeGen gen;
-  gen.mov(Reg32::eax, Mem32((unsigned int)&x));
-  gen.mov(Reg32::ebx, Imm32(3));
-  gen.add(Reg32::ebx, Imm32(2));
-  gen.add(Reg32::eax, Reg32::ebx);
+  gen.push(Reg32::ebp);
+  gen.mov(Reg32::ebp, Reg32::esp);
+  gen.mov(Reg32::eax, Ptr32(8, Reg32::ebp, 0, Scale::none));
+  gen.add(Reg32::eax, Imm32(1));
+  gen.mov(Reg32::esp, Reg32::ebp);
+  gen.pop(Reg32::ebp);
   gen.ret();
   unsigned char* data = gen.getData();
-  int (*func)() = (int (*)())data;
-  printf("%i\n", (*func)());
+  int (*func)(int) = (int (*)(int))data;
+  printf("%i\n", (*func)(x));
   return 0;
 }
