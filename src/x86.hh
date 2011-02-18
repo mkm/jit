@@ -38,14 +38,12 @@ private:
 
 class ModRM {
 public:
-  ModRM(unsigned char, unsigned char, unsigned char);
+  ModRM(unsigned char, Reg32, Reg32);
 
   void encode(InstBuffer&);
 
 private:
-  unsigned char _mod;
-  unsigned char _reg;
-  unsigned char _rm;
+  unsigned char _value;
 };
 
 class X86CodeGen {
