@@ -26,6 +26,16 @@ private:
   unsigned int _value;
 };
 
+class Mem32 {
+public:
+  Mem32(unsigned int);
+
+  void encode(InstBuffer&);
+
+private:
+  unsigned int _value;
+};
+
 class ModRM {
 public:
   ModRM(unsigned char, unsigned char, unsigned char);
@@ -48,6 +58,7 @@ public:
   void add(Reg32, Imm32);
   void mov(Reg32, Reg32);
   void mov(Reg32, Imm32);
+  void mov(Reg32, Mem32);
   void ret();
 
 private:

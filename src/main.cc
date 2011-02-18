@@ -3,8 +3,9 @@
 #include "x86.hh"
 
 int main() {
+  int x = 14;
   X86CodeGen gen;
-  gen.mov(Reg32::eax, Imm32(2));
+  gen.mov(Reg32::eax, Mem32((unsigned int)&x));
   gen.mov(Reg32::ebx, Imm32(3));
   gen.add(Reg32::ebx, Imm32(2));
   gen.add(Reg32::eax, Reg32::ebx);
