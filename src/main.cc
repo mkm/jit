@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "x86.hh"
+#include "il.hh"
 
 int main() {
   int x = 14;
