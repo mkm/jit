@@ -2,8 +2,14 @@
 
 #include "x86.hh"
 #include "il.hh"
+#include "x86-compiler.hh"
+
+int call(int (*f)()) {
+  return (*f)();
+}
 
 int main() {
+  /*
   int x = 14;
   X86::CodeGen gen;
   gen.push(X86::Reg32::ebp);
@@ -13,8 +19,10 @@ int main() {
   gen.mov(X86::Reg32::esp, X86::Reg32::ebp);
   gen.pop(X86::Reg32::ebp);
   gen.ret();
-  unsigned char* data = gen.getData();
-  int (*func)(int) = (int (*)(int))data;
-  printf("%i\n", (*func)(x));
+  */
+  IL::Function* func = new IL::Function(new IL::AddExpression(new IL::IntConstExpression(3), new IL::IntConstExpression(5)));
+  unsigned char* data = X86::compile(func);
+  int (*funcCode)() = (int (*)())data;
+  printf("%i\n", call(funcCode));
   return 0;
 }

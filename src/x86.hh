@@ -100,6 +100,7 @@ namespace X86 {
     void mov(Reg32, Imm32);
     void mov(Reg32, Mem32);
     void mov(Reg32, Ptr32);
+    void mov(Ptr32, Reg32);
     void push(Reg32);
     void pop(Reg32);
     void ret();

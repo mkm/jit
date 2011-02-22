@@ -6,7 +6,8 @@
 
 namespace IL {
   class Object {
-  
+  public:
+    virtual ~Object();
   };
 
   class Expression : public Object {
@@ -25,6 +26,16 @@ namespace IL {
     Expression* _rightArg;
   };
 
+  class IntConstExpression : public Expression {
+  public:
+    IntConstExpression(int);
+
+    int value();
+
+  private:
+    int _value;
+  };
+  
   class VariableExpression : public Expression {
   public:
     VariableExpression(std::string);
@@ -37,6 +48,7 @@ namespace IL {
 
   class Function : public Object {
   public:
+    Function(Expression*);
     Function(std::vector<std::string>, Expression*);
 
     std::vector<std::string>& params();

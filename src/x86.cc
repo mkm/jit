@@ -161,6 +161,14 @@ namespace X86 {
     }
   }
 
+  void CodeGen::mov(Ptr32 ptr, Reg32 reg) {
+    if (ptr.scale().isNone()) {
+      _buffer << 0x89 << ModRM(0b10, reg, ptr.base()) << ptr.displacement();
+    } else {
+      _buffer << 0x89 << ModRM(0b10, reg, 0b100) << ptr.sib() << ptr.displacement();
+    }
+  }
+  
   void CodeGen::push(Reg32 reg) {
     _buffer << (0x50 + reg.regCode());
   }
