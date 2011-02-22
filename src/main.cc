@@ -9,17 +9,6 @@ int call(int (*f)()) {
 }
 
 int main() {
-  /*
-  int x = 14;
-  X86::CodeGen gen;
-  gen.push(X86::Reg32::ebp);
-  gen.mov(X86::Reg32::ebp, X86::Reg32::esp);
-  gen.mov(X86::Reg32::eax, X86::Ptr32(8, X86::Reg32::ebp, 0, X86::Scale::none));
-  gen.add(X86::Reg32::eax, X86::Imm32(1));
-  gen.mov(X86::Reg32::esp, X86::Reg32::ebp);
-  gen.pop(X86::Reg32::ebp);
-  gen.ret();
-  */
   IL::Function* func = new IL::Function(new IL::AddExpression(new IL::IntConstExpression(3), new IL::IntConstExpression(5)));
   unsigned char* data = X86::compile(func);
   int (*funcCode)() = (int (*)())data;
