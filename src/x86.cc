@@ -133,22 +133,32 @@ namespace X86 {
     return _buffer.getData();
   }
 
+  InstBuffer& CodeGen::buffer() {
+    return _buffer;
+  }
+  
   void CodeGen::add(Reg32 regD, Reg32 regS) {
     _buffer << 0x01 << ModRM(0b11, regS, regD);
   }
 
-  void CodeGen::add(Reg32 reg, Imm32 imm) {
-    _buffer << 0x81 << ModRM(0b11, 0b000, reg) << imm;
+  size_t CodeGen::add(Reg32 reg, Imm32 imm) {
+    _buffer << 0x81 << ModRM(0b11, 0b000, reg);
+    size_t pos = _buffer.pos();
+    _buffer << imm;
+    return pos;
   }
 
   void CodeGen::mov(Reg32 regD, Reg32 regS) {
     _buffer << 0x89 << ModRM(0b11, regS, regD);
   }
-
-  void CodeGen::mov(Reg32 reg, Imm32 imm) {
-    _buffer << 0xC7 << ModRM(0b11, 0b000, reg) << imm;
+  
+  size_t CodeGen::mov(Reg32 reg, Imm32 imm) {
+    _buffer << 0xC7 << ModRM(0b11, 0b000, reg);
+    size_t pos = _buffer.pos();
+    _buffer << imm;
+    return pos;
   }
-
+  
   void CodeGen::mov(Reg32 reg, Mem32 mem) {
     _buffer << 0x8B << ModRM(0b00, reg, 0b101) << mem;
   }

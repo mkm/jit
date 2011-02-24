@@ -39,7 +39,7 @@ namespace X86 {
   private:
     unsigned int _value;
   };
-
+  
   class Mem32 {
   public:
     Mem32(unsigned int);
@@ -93,11 +93,12 @@ namespace X86 {
     CodeGen();
 
     unsigned char* getData();
+    InstBuffer& buffer();
 
     void add(Reg32, Reg32);
-    void add(Reg32, Imm32);
+    size_t add(Reg32, Imm32);
     void mov(Reg32, Reg32);
-    void mov(Reg32, Imm32);
+    size_t mov(Reg32, Imm32);
     void mov(Reg32, Mem32);
     void mov(Reg32, Ptr32);
     void mov(Ptr32, Reg32);

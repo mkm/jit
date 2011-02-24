@@ -16,6 +16,10 @@ unsigned char* InstBuffer::getData() {
   return _data;
 }
 
+size_t InstBuffer::pos() {
+  return _pos;
+}
+
 void InstBuffer::ensureLength() {
   if (_pos >= _length) {
     _data = (unsigned char*)mremap(_data, _length, _length + PAGESIZE, MREMAP_MAYMOVE);

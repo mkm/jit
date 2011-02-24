@@ -18,4 +18,8 @@ namespace X86 {
       return (*it).second;
     }
   }
+
+  int StackManager::stackSpace() {
+    return -_lastIndex;
+  }
 }

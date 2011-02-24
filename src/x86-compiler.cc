@@ -1,6 +1,8 @@
 #include <sstream>
 #include "x86-compiler.hh"
 #include "panic.hh"
+#include "x86.hh"
+#include "instbuffer.hh"
 
 namespace X86 {
   unsigned char* compile(IL::Function* func) {
@@ -21,10 +23,12 @@ namespace X86 {
     std::string retloc = genName();
     _gen.push(Reg32::ebp);
     _gen.mov(Reg32::ebp, Reg32::esp);
+    size_t stackSpacePos = _gen.add(Reg32::esp, X86::Imm32(0));
     compileExpression(_func->body(), retloc);
     _gen.mov(Reg32::esp, Reg32::ebp);
     _gen.pop(Reg32::ebp);
     _gen.ret();
+    _gen.buffer().alter(stackSpacePos, X86::Imm32(_stackMan.stackSpace()));
     return _gen.getData();
   }
 

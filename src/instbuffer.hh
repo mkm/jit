@@ -7,6 +7,9 @@ class InstBuffer {
 public:
   InstBuffer();
   unsigned char* getData();
+  size_t pos();
+  template<typename T>
+  void alter(size_t, T);
   template<typename T>
   void add(T);
   template<typename T>
@@ -21,7 +24,15 @@ private:
 };
 
 template<typename T>
-void InstBuffer::add(T value) {
+inline void InstBuffer::alter(size_t pos, T value) {
+  size_t curPos = _pos;
+  _pos = pos;
+  add(value);
+  _pos = curPos;
+}
+
+template<typename T>
+inline void InstBuffer::add(T value) {
   value.encode(*this);
 }
 

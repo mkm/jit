@@ -10,6 +10,7 @@ namespace X86 {
     StackManager();
 
     int stackIndex(std::string&);
+    int stackSpace();
 
   private:
     int _lastIndex;
