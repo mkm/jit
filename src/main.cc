@@ -1,17 +1,27 @@
 #include <stdio.h>
 
 #include "x86.hh"
-#include "il.hh"
 #include "x86-compiler.hh"
+#include "il.hh"
+#include "gdl.hh"
 
 int call(int (*f)()) {
   return (*f)();
 }
 
 int main() {
-  IL::Function* func = new IL::Function(new IL::AddExpression(new IL::IntConstExpression(3), new IL::IntConstExpression(5)));
-  unsigned char* data = X86::compile(func);
-  int (*funcCode)() = (int (*)())data;
-  printf("%i\n", call(funcCode));
+  while (1) {
+    char* line = NULL;
+    size_t lineBufSize;
+    if (getline(&line, &lineBufSize, stdin) == -1) {
+      break;
+    }
+    std::string lineString = line;
+    GDL::Parser parser = GDL::Parser(lineString);
+    IL::Function* lineFunc = new IL::Function(parser.parseExpression());
+    unsigned char* rawCode = X86::compile(lineFunc);
+    int (*callableCode)() = (int (*)())rawCode;
+    printf("%i\n", call(callableCode));
+  }
   return 0;
 }
