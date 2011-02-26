@@ -4,6 +4,7 @@
 #include "x86-compiler.hh"
 #include "il.hh"
 #include "gdl.hh"
+#include "ssa.hh"
 
 int call(int (*f)()) {
   return (*f)();
