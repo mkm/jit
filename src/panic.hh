@@ -3,6 +3,6 @@
 
 #include <string>
 
-void panic(const std::string&);
+void panic(const std::string&) __attribute__((noreturn));
 
 #endif

@@ -28,9 +28,9 @@ namespace IL {
   void Compiler::compileExpression(Expression* expr, std::string& retloc) {
     AddExpression* addExpr;
     IntConstExpression* intConstExpr;
-    if (addExpr = dynamic_cast<AddExpression*>(expr)) {
+    if ((addExpr = dynamic_cast<AddExpression*>(expr)) != NULL) {
       compileAddExpression(addExpr, retloc);
-    } else if (intConstExpr = dynamic_cast<IntConstExpression*>(expr)) {
+    } else if ((intConstExpr = dynamic_cast<IntConstExpression*>(expr)) != NULL) {
       compileIntConstExpression(intConstExpr, retloc);
     } else {
       panic("Unknown expression type.\n");
