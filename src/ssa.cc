@@ -5,16 +5,28 @@ namespace SSA {
     _op(op),
     _dest(dest),
     _srcA(),
-    _srcB()
+    _srcB(),
+    _immediate()
   {
 
   }
 
+  Instruction::Instruction(InstructionOp op, InstructionArg dest, int immediate) :
+    _op(op),
+    _dest(dest),
+    _srcA(),
+    _srcB(),
+    _immediate(immediate)
+  {
+    
+  }
+  
   Instruction::Instruction(InstructionOp op, InstructionArg dest, InstructionArg srcA) :
     _op(op),
     _dest(dest),
     _srcA(srcA),
-    _srcB()
+    _srcB(),
+    _immediate()
   {
 
   }
@@ -23,23 +35,32 @@ namespace SSA {
     _op(op),
     _dest(dest),
     _srcA(srcA),
-    _srcB(srcB)
+    _srcB(srcB),
+    _immediate()
   {
-
+    
   }
 
-  InstructionArg Instruction::dest() {
+  InstructionOp Instruction::op() const {
+    return _op;
+  }
+
+  InstructionArg Instruction::dest() const {
     return _dest;
   }
 
-  InstructionArg Instruction::srcA() {
+  InstructionArg Instruction::srcA() const {
     return _srcA;
   }
 
-  InstructionArg Instruction::srcB() {
+  InstructionArg Instruction::srcB() const {
     return _srcB;
   }
 
+  int Instruction::immediate() const {
+    return _immediate;
+  }
+  
   Block::Block() :
     _instructions()
   {

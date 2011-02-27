@@ -9,7 +9,7 @@ namespace X86 {
   public:
     StackManager();
 
-    int stackIndex(std::string&);
+    int stackIndex(const std::string&);
     int stackSpace();
 
   private:

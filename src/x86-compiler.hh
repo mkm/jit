@@ -5,26 +5,24 @@
 #include "instbuffer.hh"
 #include "x86.hh"
 #include "x86-storage.hh"
+#include "ssa.hh"
 
 namespace X86 {
-  unsigned char* compile(IL::Function*);
+  unsigned char* compile(SSA::Block*);
 
   class FunctionCompiler {
   public:
-    FunctionCompiler(IL::Function*);
+    FunctionCompiler(SSA::Block*);
 
     unsigned char* compile();
 
   private:
-    IL::Function* _func;
+    SSA::Block* _block;
     StackManager _stackMan;
     CodeGen _gen;
-    int _nameCounter;
 
-    std::string genName();
-    void compileExpression(IL::Expression*, std::string retloc);
-    void compileAddExpression(IL::AddExpression*, std::string retloc);
-    void compileIntConstExpression(IL::IntConstExpression*, std::string retloc);
+    void compileBlock();
+    void compileInstruction(const SSA::Instruction&);
   };
 }
 

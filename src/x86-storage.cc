@@ -8,7 +8,7 @@ namespace X86 {
 
   }
 
-  int StackManager::stackIndex(std::string& name) {
+  int StackManager::stackIndex(const std::string& name) {
     std::map<std::string, int>::const_iterator it = _stackIndices.find(name);
     if (it == _stackIndices.end()) {
       _lastIndex -= 4;

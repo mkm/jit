@@ -7,8 +7,10 @@
 namespace SSA {
   enum InstructionOp {
     LabelOp,
+    RetOp,
     MoveOp,
-    AddOp
+    AddOp,
+    LoadConstOp
   };
 
   typedef std::string InstructionArg;
@@ -16,16 +18,20 @@ namespace SSA {
   class Instruction {
   public:
     Instruction(InstructionOp, InstructionArg);
+    Instruction(InstructionOp, InstructionArg, int);
     Instruction(InstructionOp, InstructionArg, InstructionArg);
     Instruction(InstructionOp, InstructionArg, InstructionArg, InstructionArg);
 
-    InstructionArg dest();
-    InstructionArg srcA();
-    InstructionArg srcB();
+    InstructionOp op() const;
+    InstructionArg dest() const;
+    InstructionArg srcA() const;
+    InstructionArg srcB() const;
+    int immediate() const;
 
   private:
     InstructionOp _op;
     InstructionArg _dest, _srcA, _srcB;
+    int _immediate;
   };
   
   class Block {

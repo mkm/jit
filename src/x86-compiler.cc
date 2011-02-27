@@ -1,30 +1,28 @@
-#include <sstream>
+#include <vector>
 #include "x86-compiler.hh"
 #include "panic.hh"
 #include "x86.hh"
 #include "instbuffer.hh"
 
 namespace X86 {
-  unsigned char* compile(IL::Function* func) {
-    FunctionCompiler comp(func);
+  unsigned char* compile(SSA::Block* block) {
+    FunctionCompiler comp(block);
     return comp.compile();
   }
 
-  FunctionCompiler::FunctionCompiler(IL::Function* func) :
-    _func(func),
+  FunctionCompiler::FunctionCompiler(SSA::Block* block) :
+    _block(block),
     _stackMan(),
-    _gen(),
-    _nameCounter(0)
+    _gen()
   {
     
   }
 
   unsigned char* FunctionCompiler::compile() {
-    std::string retloc = genName();
     _gen.push(Reg32::ebp);
     _gen.mov(Reg32::ebp, Reg32::esp);
     size_t stackSpacePos = _gen.add(Reg32::esp, X86::Imm32(0));
-    compileExpression(_func->body(), retloc);
+    compileBlock();
     _gen.mov(Reg32::esp, Reg32::ebp);
     _gen.pop(Reg32::ebp);
     _gen.ret();
@@ -32,38 +30,35 @@ namespace X86 {
     return _gen.getData();
   }
 
-  std::string FunctionCompiler::genName() {
-    std::stringstream s;
-    s << "__name_" << _nameCounter;
-    _nameCounter++;
-    return s.str();
-  }
-  
-  void FunctionCompiler::compileExpression(IL::Expression* expr, std::string retloc) {
-    IL::AddExpression* addExpr;
-    IL::IntConstExpression* intConstExpr;
-    if (addExpr = dynamic_cast<IL::AddExpression*>(expr)) {
-      compileAddExpression(addExpr, retloc);
-    } else if (intConstExpr = dynamic_cast<IL::IntConstExpression*>(expr)) {
-      compileIntConstExpression(intConstExpr, retloc);
-    } else {
-      panic("Unknown expression type.\n");
+  void FunctionCompiler::compileBlock() {
+    const std::vector<SSA::Instruction>& ins = _block->instructions();
+    std::vector<SSA::Instruction>::const_iterator i, end;
+    for (i = ins.begin(), end = ins.end(); i != end; ++i) {
+      compileInstruction(*i);
     }
   }
 
-  void FunctionCompiler::compileAddExpression(IL::AddExpression* addExpr, std::string retloc) {
-    std::string leftLoc = genName();
-    std::string rightLoc = genName();
-    compileExpression(addExpr->leftArg(), leftLoc);
-    compileExpression(addExpr->rightArg(), rightLoc);
-    _gen.mov(Reg32::eax, Ptr32(_stackMan.stackIndex(leftLoc), Reg32::ebp, Reg32::eax, Scale::none));
-    _gen.mov(Reg32::ebx, Ptr32(_stackMan.stackIndex(rightLoc), Reg32::ebp, Reg32::eax, Scale::none));
-    _gen.add(Reg32::eax, Reg32::ebx);
-    _gen.mov(Ptr32(_stackMan.stackIndex(retloc), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
-  }
-
-  void FunctionCompiler::compileIntConstExpression(IL::IntConstExpression* expr, std::string retloc) {
-    _gen.mov(Reg32::eax, Imm32(expr->value()));
-    _gen.mov(Ptr32(_stackMan.stackIndex(retloc), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
+  void FunctionCompiler::compileInstruction(const SSA::Instruction& in) {
+    switch (in.op()) {
+    case SSA::RetOp:
+      _gen.mov(Reg32::eax, Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none));
+      break;
+    case SSA::MoveOp:
+      _gen.mov(Reg32::eax, Ptr32(_stackMan.stackIndex(in.srcA()), Reg32::ebp, Reg32::eax, Scale::none));
+      _gen.mov(Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
+      break;
+    case SSA::AddOp:
+      _gen.mov(Reg32::eax, Ptr32(_stackMan.stackIndex(in.srcA()), Reg32::ebp, Reg32::eax, Scale::none));
+      _gen.mov(Reg32::ebx, Ptr32(_stackMan.stackIndex(in.srcB()), Reg32::ebp, Reg32::eax, Scale::none));
+      _gen.add(Reg32::eax, Reg32::ebx);
+      _gen.mov(Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
+      break;
+    case SSA::LoadConstOp:
+      _gen.mov(Reg32::eax, Imm32(in.immediate()));
+      _gen.mov(Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
+      break;
+    default:
+      panic("Unknown instruction.\n");
+    }
   }
 }
