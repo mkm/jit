@@ -53,6 +53,12 @@ namespace X86 {
       _gen.add(Reg32::eax, Reg32::ebx);
       _gen.mov(Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
       break;
+    case SSA::SubOp:
+      _gen.mov(Reg32::eax, Ptr32(_stackMan.stackIndex(in.srcA()), Reg32::ebp, Reg32::eax, Scale::none));
+      _gen.mov(Reg32::ebx, Ptr32(_stackMan.stackIndex(in.srcB()), Reg32::ebp, Reg32::eax, Scale::none));
+      _gen.sub(Reg32::eax, Reg32::ebx);
+      _gen.mov(Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);
+      break;
     case SSA::LoadConstOp:
       _gen.mov(Reg32::eax, Imm32(in.immediate()));
       _gen.mov(Ptr32(_stackMan.stackIndex(in.dest()), Reg32::ebp, Reg32::eax, Scale::none), Reg32::eax);

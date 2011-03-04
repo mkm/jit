@@ -17,6 +17,7 @@ namespace IL {
     void compileFunction(Function*);
     void compileExpression(Expression*, std::string&);
     void compileAddExpression(AddExpression*, std::string&);
+    void compileSubtractExpression(SubtractExpression*, std::string&);
     void compileIntConstExpression(IntConstExpression*, std::string&);
     
   private:

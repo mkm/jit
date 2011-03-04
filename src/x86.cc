@@ -147,6 +147,17 @@ namespace X86 {
     _buffer << imm;
     return pos;
   }
+  
+  void CodeGen::sub(Reg32 regD, Reg32 regS) {
+    _buffer << 0x29 << ModRM(0b11, regS, regD);
+  }
+
+  size_t CodeGen::sub(Reg32 reg, Imm32 imm) {
+    _buffer << 0x81 << ModRM(0b11, 0b101, reg);
+    size_t pos = _buffer.pos();
+    _buffer << imm;
+    return pos;
+  }
 
   void CodeGen::mov(Reg32 regD, Reg32 regS) {
     _buffer << 0x89 << ModRM(0b11, regS, regD);

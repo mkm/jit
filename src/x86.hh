@@ -97,6 +97,8 @@ namespace X86 {
 
     void add(Reg32, Reg32);
     size_t add(Reg32, Imm32);
+    void sub(Reg32, Reg32);
+    size_t sub(Reg32, Imm32);
     void mov(Reg32, Reg32);
     size_t mov(Reg32, Imm32);
     void mov(Reg32, Mem32);

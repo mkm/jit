@@ -10,6 +10,7 @@ namespace SSA {
     RetOp,
     MoveOp,
     AddOp,
+    SubOp,
     LoadConstOp
   };
 

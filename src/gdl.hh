@@ -56,7 +56,7 @@ namespace GDL {
 
     void parseEOF();
     IL::Expression* parseExpression();
-    IL::Expression* parseAddExpression();
+    IL::Expression* parseOpExpression();
     IL::IntConstExpression* parseIntConstExpression();
 
   private:

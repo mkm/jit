@@ -13,7 +13,7 @@ namespace IL {
   }
 
   std::string AddExpression::toString() {
-    return "(" + _leftArg->toString() + ", " + _rightArg->toString() + ")";
+    return "(AddExpression " + _leftArg->toString() + " " + _rightArg->toString() + ")";
   }
   
   Expression* AddExpression::leftArg() {
@@ -21,6 +21,25 @@ namespace IL {
   }
   
   Expression* AddExpression::rightArg() {
+    return _rightArg;
+  }
+
+  SubtractExpression::SubtractExpression(Expression* leftArg, Expression* rightArg) :
+    _leftArg(leftArg),
+    _rightArg(rightArg)
+  {
+
+  }
+
+  std::string SubtractExpression::toString() {
+    return "(SubtractExpression" + _leftArg->toString() + " " + _rightArg->toString() + ")";
+  }
+  
+  Expression* SubtractExpression::leftArg() {
+    return _leftArg;
+  }
+  
+  Expression* SubtractExpression::rightArg() {
     return _rightArg;
   }
 

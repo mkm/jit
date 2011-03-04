@@ -69,6 +69,10 @@ namespace GDL {
         add(OpToken, "+");
         ++_pos;
         break;
+      case '-':
+        add(OpToken, "-");
+        ++_pos;
+        break;
       default:
         if (isDigit(c)) {
           number();
@@ -145,15 +149,19 @@ namespace GDL {
   }
   
   IL::Expression* Parser::parseExpression() {
-    return parseAddExpression();
+    return parseOpExpression();
   }
 
-  IL::Expression* Parser::parseAddExpression() {
+  IL::Expression* Parser::parseOpExpression() {
     IL::Expression* left = parseIntConstExpression();
-    if ((*_pos).type() == OpToken) {
+    if ((*_pos).type() == OpToken && (*_pos).value() == "+") {
       ++_pos;
       IL::Expression* right = parseExpression();
       return new IL::AddExpression(left, right);
+    } else if ((*_pos).type() == OpToken && (*_pos).value() == "-") {
+      ++_pos;
+      IL::Expression* right = parseExpression();
+      return new IL::SubtractExpression(left, right);
     } else {
       return left;
     }

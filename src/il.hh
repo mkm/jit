@@ -29,6 +29,19 @@ namespace IL {
     Expression* _rightArg;
   };
 
+  class SubtractExpression : public Expression {
+  public:
+    SubtractExpression(Expression*, Expression*);
+
+    virtual std::string toString();
+    Expression* leftArg();
+    Expression* rightArg();
+    
+  private:
+    Expression* _leftArg;
+    Expression* _rightArg;
+  };
+
   class IntConstExpression : public Expression {
   public:
     IntConstExpression(int);
