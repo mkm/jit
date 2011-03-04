@@ -8,6 +8,8 @@ namespace IL {
   class Object {
   public:
     virtual ~Object();
+
+    virtual std::string toString() = 0;
   };
 
   class Expression : public Object {
@@ -18,6 +20,7 @@ namespace IL {
   public:
     AddExpression(Expression*, Expression*);
 
+    virtual std::string toString();
     Expression* leftArg();
     Expression* rightArg();
     
@@ -30,6 +33,7 @@ namespace IL {
   public:
     IntConstExpression(int);
 
+    virtual std::string toString();
     int value();
 
   private:
@@ -40,6 +44,7 @@ namespace IL {
   public:
     VariableExpression(std::string);
 
+    virtual std::string toString();
     std::string& name();
 
   private:
@@ -51,6 +56,7 @@ namespace IL {
     Function(Expression*);
     Function(std::vector<std::string>, Expression*);
 
+    virtual std::string toString();
     std::vector<std::string>& params();
     Expression* body();
     

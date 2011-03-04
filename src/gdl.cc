@@ -132,8 +132,8 @@ namespace GDL {
     return c == ' ' || c == '\t' || c == '\n';
   }
   
-  Parser::Parser(std::string& s) :
-    _pos(Tokeniser(s).tokenise().begin())
+  Parser::Parser(const std::vector<Token>& tokens) :
+    _pos(tokens.begin())
   {
     
   }
@@ -150,7 +150,7 @@ namespace GDL {
 
   IL::Expression* Parser::parseAddExpression() {
     IL::Expression* left = parseIntConstExpression();
-    if ((*_pos).type() == OpToken && (*_pos).value() == "+") {
+    if ((*_pos).type() == OpToken) {
       ++_pos;
       IL::Expression* right = parseExpression();
       return new IL::AddExpression(left, right);
@@ -161,7 +161,7 @@ namespace GDL {
 
   IL::IntConstExpression* Parser::parseIntConstExpression() {
     if ((*_pos).type() == IntLitToken) {
-      return new IL::IntConstExpression((*_pos).intValue());
+      return new IL::IntConstExpression((*_pos++).intValue());
     } else {
       error(IntLitToken);
     }

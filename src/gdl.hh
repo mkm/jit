@@ -52,7 +52,7 @@ namespace GDL {
   
   class Parser {
   public:
-    Parser(std::string&);
+    Parser(const std::vector<Token>&);
 
     void parseEOF();
     IL::Expression* parseExpression();

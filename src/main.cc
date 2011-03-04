@@ -19,7 +19,9 @@ void loop() {
       break;
     }
     std::string lineString = line;
-    GDL::Parser parser = GDL::Parser(lineString);
+    GDL::Tokeniser tokeniser = GDL::Tokeniser(lineString);
+    const std::vector<GDL::Token> tokens = tokeniser.tokenise();
+    GDL::Parser parser = GDL::Parser(tokens);
     IL::Function* lineFunc = new IL::Function(parser.parseExpression());
     SSA::Block* block = IL::compile(lineFunc);
     unsigned char* rawCode = X86::compile(block);

@@ -12,6 +12,10 @@ namespace IL {
 
   }
 
+  std::string AddExpression::toString() {
+    return "(" + _leftArg->toString() + ", " + _rightArg->toString() + ")";
+  }
+  
   Expression* AddExpression::leftArg() {
     return _leftArg;
   }
@@ -26,6 +30,10 @@ namespace IL {
 
   }
 
+  std::string IntConstExpression::toString() {
+    return "(IntConstExpression)";
+  }
+  
   int IntConstExpression::value() {
     return _value;
   }
@@ -36,6 +44,10 @@ namespace IL {
 
   }
 
+  std::string VariableExpression::toString() {
+    return "(VariableExpression" + _name + ")";
+  }
+  
   std::string& VariableExpression::name() {
     return _name;
   }
@@ -54,6 +66,10 @@ namespace IL {
 
   }
 
+  std::string Function::toString() {
+    return "(Function " + _body->toString() + ")";
+  }
+  
   std::vector<std::string>& Function::params() {
     return _params;
   }
