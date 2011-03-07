@@ -6,9 +6,9 @@ for t in *.test
 do
     if ./$t
     then
-        result="PASS"
+        result='\e[32mPASS\e[0m'
     else
-        result="FAIL"
+        result='\e[31mFAIL\e[0m'
         failcount=$(($failcount + 1))
     fi
     printf "%-40s[$result]\n" "$t"
