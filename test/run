@@ -1,0 +1,22 @@
+#!/bin/bash
+
+failcount=0
+
+for t in *.test
+do
+    if ./$t
+    then
+        result="PASS"
+    else
+        result="FAIL"
+        failcount=$(($failcount + 1))
+    fi
+    printf "%-40s[$result]\n" "$t"
+done
+
+echo
+echo "$failcount tests failed"
+if [ "$failcount" -ne 0 ]
+then
+    exit 1
+fi

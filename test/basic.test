@@ -1,0 +1,4 @@
+#!/bin/bash
+
+answer=$(echo "42 + 13 - 4" | "$JIT")
+[ "$answer" -eq  51 ]

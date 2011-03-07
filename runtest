@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export JIT="$PWD/jit"
+
+cd test
+./run
